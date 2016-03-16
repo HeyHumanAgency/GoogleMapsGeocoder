@@ -1,5 +1,8 @@
 <?php
 
+  use \GuzzleHttp\Client;
+  use \GuzzleHttp\Psr7\Request;
+
   /**
    * A PHP wrapper for the Google Maps Geocoding API v3.
    *
@@ -1009,14 +1012,17 @@
      * @link   https://developers.google.com/maps/documentation/geocoding/intro#GeocodingResponses
      * @param  bool $https whether to make the request over HTTPS
      * @param  bool $raw whether to return the raw (string) response
-     * @param  resource $context stream context from `stream_context_create()`
+     * @param  request $options http://docs.guzzlephp.org/en/latest/request-options.html
      * @return string|array|SimpleXMLElement response in requested format
      */
-    public function geocode($https = false, $raw = false, $context = null) {
-      $response = file_get_contents($this->geocodeUrl($https), false, $context);
+    public function geocode($https = false, $raw = false, $options = []) {
+      $client = new Client();
+      $req = new Request('GET', $this->geocodeUrl($https));
+      $res = $client->send($req, $options);
+      $response = $res->getBody();
 
       if ($raw) {
-        return $response;
+        return (string) $response;
       }
       elseif ($this->isFormatJson()) {
         return json_decode($response, true);
@@ -1025,7 +1031,7 @@
         return new SimpleXMLElement($response);
       }
       else {
-        return $response;
+        return (string) $response;
       }
     }
 
