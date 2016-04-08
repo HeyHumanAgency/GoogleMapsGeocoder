@@ -331,6 +331,13 @@
     private $region;
 
     /**
+     * List of component filters
+     *
+     * @var string
+     */
+    private $components;
+
+    /**
      * Language code in which to return results.
      *
      * @var string
@@ -717,6 +724,31 @@
     }
 
     /**
+     * Set the component filters
+     *
+     * @link   https://developers.google.com/maps/documentation/geocoding/intro#ComponentFiltering
+     * @param  string $components list of components
+     * @return GoogleMapsGeocoder
+     *
+     * @example `setComponents('administrative_area:TX|country:US')`
+     */
+    public function setComponents($components) {
+      $this->components = $components;
+
+      return $this;
+    }
+
+    /**
+     * Get the component filters
+     *
+     * @link   https://developers.google.com/maps/documentation/geocoding/intro#ComponentFiltering
+     * @return string list of components
+     */
+    public function getComponents() {
+      return $this->components;
+    }
+
+    /**
      * Set the language code in which to return results.
      *
      * @link   https://developers.google.com/maps/faq#languagesupport
@@ -955,6 +987,7 @@
       // Optional parameters.
       $queryString['bounds'] = $this->getBounds();
       $queryString['region'] = $this->getRegion();
+      $queryString['components'] = $this->getComponents();
       $queryString['language'] = $this->getLanguage();
       $queryString['result_type'] = $this->getResultTypeFormatted();
       $queryString['location_type'] = $this->getLocationTypeFormatted();
